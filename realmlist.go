@@ -4,6 +4,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -53,6 +54,7 @@ func getToken() string {
 }
 
 func main() {
+	flag.Parse()
 	token := getToken()
 	url := fmt.Sprintf("https://%s.api.blizzard.com/wow/realm/status?locale=%s&access_token=%s", *regionFlag, *localeFlag, token)
 	log.Infof("Using url %s", url)
@@ -62,6 +64,11 @@ func main() {
 		FollowRedirects:   true,
 	}
 	res, data := fhttp.Fetch(&o)
-	log.Infof("code = %d, data=%s", res, fhttp.DebugSummary(data, 512))
-
+	log.LogVf("code = %d, data=%s", res, fhttp.DebugSummary(data, 512))
+	outFile := os.Stdout
+	var jsonIndented bytes.Buffer
+	if err := json.Indent(&jsonIndented, data, "", "  "); err != nil {
+		log.Fatalf("Unable to indent json result %s: %v", fhttp.DebugSummary(data, 80), err)
+	}
+	jsonIndented.WriteTo(outFile)
 }
