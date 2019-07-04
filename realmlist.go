@@ -1,6 +1,9 @@
 // Copyright 2019 MooreaTv moorea@ymail.com
 // All Rights Reserved
 
+// Get your OAUTH_CID and OAUTH_SEC by creating a client on
+// https://develop.battle.net/access/clients
+
 package main
 
 import (
@@ -22,13 +25,12 @@ var (
 func getToken() string {
 	cid := os.Getenv("OAUTH_CID")
 	if len(cid) == 0 {
-		log.Fatalf("Please specify client id as OAUTH_CID env var")
+		log.Fatalf("Please specify client id as OAUTH_CID env var (https://develop.battle.net/access/clients)")
 	}
 	csec := os.Getenv("OAUTH_SEC")
 	if len(csec) == 0 {
 		log.Fatalf("Please specify client secret as OAUTH_SEC env var")
 	}
-	// curl -u {client_id}:{client_secret} -d grant_type=client_credentials https://us.battle.net/oauth/token
 	tokenURL := "https://us.battle.net/oauth/token" // always US even for EU ?
 	log.Infof("Getting token from %s...", tokenURL)
 
