@@ -12,5 +12,6 @@ By default it pretty prints the whole Json structure returned but you can use `-
 go run realmlist.go -names -region eu > Realms_eu.lua
 go run realmlist.go -names -region us > Realms_us.lua
 ```
+The resulting files and utility LUA functions for Wow addons are available in as part of https://github.com/mooreatv/MoLib
 
 Add `-loglevel verbose` or `-loglevel debug` to see more details during the execution.
