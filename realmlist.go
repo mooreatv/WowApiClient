@@ -73,12 +73,14 @@ func getToken(region string) string {
 	return token.(string)
 }
 
+// LocaleNameMap is Name/Locale structure
+type LocaleNameMap map[string]string
+
 // Realm structure
 type Realm struct {
-	Name        string
-	Type        string
-	Population  string
-	Battlegroup string
+	Name LocaleNameMap
+	ID   int
+	Slug string
 }
 
 func parseRealmList(data []byte) []Realm {
@@ -141,7 +143,9 @@ func main() {
 		realms := parseRealmList(data)
 		fmt.Fprintf(outFile, header, region, time.Now().UTC().Format(time.UnixDate))
 		for _, r := range realms {
-			fmt.Fprintf(outFile, "  \"%s\",\n", r.Name)
+			// seems like pt_BR has the correct realm name in russian servers and us servers too
+			// without having to do 1 by 1 realm calls to find the correct locale
+			fmt.Fprintf(outFile, "  %d = \"%s\", -- \"%s\", %s\n", r.ID, r.Name["pt_BR"], r.Name["en_US"], r.Slug)
 		}
 		fmt.Fprintf(outFile, footer, region)
 		return
